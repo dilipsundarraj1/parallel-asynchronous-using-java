@@ -35,7 +35,7 @@ public class ProductServiceUsingThread {
 
         stopWatch.stop();
         log("Total Time Taken : "+ stopWatch.getTime());
-        return new Product(productInfoRunnable.productInfo, reviewRunnable.review);
+        return new Product(productId, productInfoRunnable.productInfo, reviewRunnable.review);
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -64,7 +64,7 @@ public class ProductServiceUsingThread {
         @Override
         public void run() {
 
-            productInfo = productInfoService.retrieveProductDetails(productId);
+            productInfo = productInfoService.retrieveProductInfo(productId);
         }
     }
 
