@@ -20,12 +20,12 @@ public class ProductService {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        ProductInfo productInfo = productInfoService.retrieveProductDetails(productId);
+        ProductInfo productInfo = productInfoService.retrieveProductInfo(productId);
         Review review = reviewService.retrieveReviews(productId);
 
         stopWatch.stop();
         log("Total Time Taken : "+ stopWatch.getTime());
-        return new Product(productInfo, review);
+        return new Product(productId, productInfo, review);
     }
 
     public static void main(String[] args) {
