@@ -12,11 +12,11 @@ import java.util.concurrent.RecursiveTask;
 import static com.learnjava.util.CommonUtil.delay;
 import static com.learnjava.util.CommonUtil.stopWatch;
 
-public class ForkJoinExampleUsingRecursion extends RecursiveTask<List<String>> {
+public class ForkJoinUsingRecursion extends RecursiveTask<List<String>> {
 
     private List<String> inputList;
 
-    public ForkJoinExampleUsingRecursion(List<String> inputList) {
+    public ForkJoinUsingRecursion(List<String> inputList) {
         this.inputList = inputList;
     }
 
@@ -34,7 +34,8 @@ public class ForkJoinExampleUsingRecursion extends RecursiveTask<List<String>> {
             return resultList;
         }
         int midPoint = inputList.size() / 2;
-        ForkJoinTask<List<String>> leftInputList = new ForkJoinExampleUsingRecursion(inputList.subList(0, midPoint)).fork(); //left side of the list
+        ForkJoinTask<List<String>> leftInputList = new ForkJoinUsingRecursion(inputList.subList(0, midPoint)) //left side of the list
+                .fork(); // Arranges this task  in the deque
         inputList = inputList.subList(midPoint, inputList.size()); //right side of the list
         List<String> rightResult = compute();
         List<String> leftResult = leftInputList.join();
@@ -50,11 +51,11 @@ public class ForkJoinExampleUsingRecursion extends RecursiveTask<List<String>> {
     public static void main(String[] args) {
 
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        ForkJoinExampleUsingRecursion forkJoinExampleUsingRecursion = new ForkJoinExampleUsingRecursion(DataSet.namesList());
+        ForkJoinUsingRecursion forkJoinExampleUsingRecursion = new ForkJoinUsingRecursion(DataSet.namesList());
         stopWatch.start();
 
-
-        List<String> resultList = forkJoinPool.invoke(forkJoinExampleUsingRecursion); // Start things running and get the result back, This is blocked until the results are calculated.
+        // Start things running and get the result back, This is blocked until the results are calculated.
+        List<String> resultList = forkJoinPool.invoke(forkJoinExampleUsingRecursion); // invoke -> Add the task to the shared queue from which all the other qu
 
         LoggerUtil.log("resultList : " + resultList);
 
