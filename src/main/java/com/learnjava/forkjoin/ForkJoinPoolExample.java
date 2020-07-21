@@ -4,42 +4,42 @@ import com.learnjava.util.DataSet;
 import com.learnjava.util.LoggerUtil;
 import org.apache.commons.lang3.time.StopWatch;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 
 import static com.learnjava.util.CommonUtil.delay;
 
-public class ForkJoinPoolExample extends RecursiveTask<String> {
+public class ForkJoinPoolExample  {
 
-    public static final ForkJoinPool FORK_JOIN_POOL = new ForkJoinPool();
+    ForkJoinPool forkJoinPool = new ForkJoinPool();
 
-    private List<String> inputList;
+    public List<String> compute(List<String> inputList){
 
-    public ForkJoinPoolExample(List<String> inputList) {
-        this.inputList = inputList;
-    }
+        return  forkJoinPool.invoke(new RecursiveTask<>() {
+            @Override
+            protected List<String> compute() {
+                List<ForkJoinTask<String>> forkJoinTasks = new ArrayList<>();
+                List<String> responseList = new ArrayList<>();
 
+                inputList.forEach((item) -> {
+                    forkJoinTasks.add(new RecursiveTask<String>() {
+                        @Override
+                        protected String compute() {
+                            return transform(item);
+                        }
+                    }.fork()); // This adds the task to the forkjoin deque
+                });
+                //Joining RecursiveTask
+                forkJoinTasks.forEach(task -> {
+                    responseList.add(task.join()); //This retrieves the result
+                });
 
-    @Override
-    protected String compute() {
-        if(inputList.size() == 1) {
-            return transform(inputList.get(0));
-        }
-
-        List<String> oneStores = inputList.subList(0, inputList.size()/2);
-        List<String> twoStores = inputList.subList(inputList.size()/2,
-                inputList.size());
-
-        ForkJoinPoolExample cTaskOne = new ForkJoinPoolExample(oneStores);
-        cTaskOne.fork();
-
-        ForkJoinPoolExample cTaskTwo = new ForkJoinPoolExample(twoStores);
-
-        return cTaskTwo.compute()+"," + cTaskOne.join();
-
-        // Split the list by half recursively until there is a single element
-
+                return responseList;
+            }
+        });
     }
 
     private String transform(String s) {
@@ -49,12 +49,12 @@ public class ForkJoinPoolExample extends RecursiveTask<String> {
 
     public static void main(String[] args) {
 
-        ForkJoinPoolExample forkJoinPoolExample = new ForkJoinPoolExample(DataSet.namesList());
+        ForkJoinPoolExample forkJoinPoolExample = new ForkJoinPoolExample();
         StopWatch stopWatch= new StopWatch();
         stopWatch.start();
-        String output = FORK_JOIN_POOL.invoke(forkJoinPoolExample);
+        List<String> resultList = forkJoinPoolExample.compute(DataSet.namesList());
+        LoggerUtil.log("resultList : "+ resultList);
         stopWatch.stop();
         LoggerUtil.log("Total time taken : "+ stopWatch.getTime());
-        LoggerUtil.log(output);
     }
 }
