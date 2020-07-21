@@ -3,8 +3,7 @@ package com.learnjava.service;
 import com.learnjava.domain.Product;
 import com.learnjava.domain.ProductInfo;
 import com.learnjava.domain.Review;
-import org.apache.commons.lang3.time.StopWatch;
-
+import static com.learnjava.util.CommonUtil.stopWatch;
 import static com.learnjava.util.LoggerUtil.log;
 
 public class ProductService {
@@ -17,7 +16,6 @@ public class ProductService {
     }
 
     public Product retrieveProductDetails(String productId) {
-        StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
         ProductInfo productInfo = productInfoService.retrieveProductInfo(productId);
