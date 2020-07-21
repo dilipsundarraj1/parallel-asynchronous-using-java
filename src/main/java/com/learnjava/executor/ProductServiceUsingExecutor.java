@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static com.learnjava.util.CommonUtil.stopWatch;
 import static com.learnjava.util.LoggerUtil.log;
 
 public class ProductServiceUsingExecutor {
@@ -27,7 +28,6 @@ public class ProductServiceUsingExecutor {
     }
 
     public Product retrieveProductDetails(String productId) throws ExecutionException, InterruptedException {
-        StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
         Future<ProductInfo> productInfoFuture = executorService.submit(() -> productInfoService.retrieveProductInfo(productId));

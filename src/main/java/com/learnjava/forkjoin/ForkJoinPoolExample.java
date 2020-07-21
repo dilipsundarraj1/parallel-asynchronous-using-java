@@ -11,6 +11,7 @@ import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 
 import static com.learnjava.util.CommonUtil.delay;
+import static com.learnjava.util.CommonUtil.stopWatch;
 
 public class ForkJoinPoolExample  {
 
@@ -50,10 +51,11 @@ public class ForkJoinPoolExample  {
     public static void main(String[] args) {
 
         ForkJoinPoolExample forkJoinPoolExample = new ForkJoinPoolExample();
-        StopWatch stopWatch= new StopWatch();
         stopWatch.start();
+
         List<String> resultList = forkJoinPoolExample.compute(DataSet.namesList());
         LoggerUtil.log("resultList : "+ resultList);
+
         stopWatch.stop();
         LoggerUtil.log("Total time taken : "+ stopWatch.getTime());
     }

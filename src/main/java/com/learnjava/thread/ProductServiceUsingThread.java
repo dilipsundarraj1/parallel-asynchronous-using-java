@@ -7,6 +7,7 @@ import com.learnjava.service.ProductInfoService;
 import com.learnjava.service.ReviewService;
 import org.apache.commons.lang3.time.StopWatch;
 
+import static com.learnjava.util.CommonUtil.stopWatch;
 import static com.learnjava.util.LoggerUtil.log;
 
 public class ProductServiceUsingThread {
@@ -19,7 +20,6 @@ public class ProductServiceUsingThread {
     }
 
     public Product retrieveProductDetails(String productId) throws InterruptedException {
-        StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         ProductInfoRunnable productInfoRunnable = new ProductInfoRunnable(productId);
         ReviewRunnable reviewRunnable = new ReviewRunnable(productId);
