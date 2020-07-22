@@ -18,8 +18,8 @@ public class ProductService {
     public Product retrieveProductDetails(String productId) {
         stopWatch.start();
 
-        ProductInfo productInfo = productInfoService.retrieveProductInfo(productId);
-        Review review = reviewService.retrieveReviews(productId);
+        ProductInfo productInfo = productInfoService.retrieveProductInfo(productId); // blocking call
+        Review review = reviewService.retrieveReviews(productId); // blocking call
 
         stopWatch.stop();
         log("Total Time Taken : "+ stopWatch.getTime());
