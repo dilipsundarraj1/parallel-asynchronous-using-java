@@ -7,10 +7,7 @@ import com.learnjava.service.ProductInfoService;
 import com.learnjava.service.ReviewService;
 import org.apache.commons.lang3.time.StopWatch;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import static com.learnjava.util.CommonUtil.stopWatch;
 import static com.learnjava.util.LoggerUtil.log;
@@ -27,21 +24,23 @@ public class ProductServiceUsingExecutor {
         this.reviewService = reviewService;
     }
 
-    public Product retrieveProductDetails(String productId) throws ExecutionException, InterruptedException {
+    public Product retrieveProductDetails(String productId) throws ExecutionException, InterruptedException, TimeoutException {
         stopWatch.start();
 
         Future<ProductInfo> productInfoFuture = executorService.submit(() -> productInfoService.retrieveProductInfo(productId));
         Future<Review> reviewFuture = executorService.submit(() -> reviewService.retrieveReviews(productId));
 
         ProductInfo productInfo = productInfoFuture.get();
+        //ProductInfo productInfo = productInfoFuture.get(2, TimeUnit.SECONDS);
         Review review = reviewFuture.get();
+        //Review review = reviewFuture.get(2, TimeUnit.SECONDS);
 
         stopWatch.stop();
         log("Total Time Taken : " + stopWatch.getTime());
         return new Product(productId, productInfo, review);
     }
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException, TimeoutException {
 
         ProductInfoService productInfoService = new ProductInfoService();
         ReviewService reviewService = new ReviewService();

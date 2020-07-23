@@ -2,6 +2,7 @@ package com.learnjava.service;
 
 import com.learnjava.domain.ProductInfo;
 import com.learnjava.domain.ProductOption;
+import com.learnjava.util.LoggerUtil;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class ProductInfoService {
         delay(1000);
         List<ProductOption> productOptions = List.of(new ProductOption(1, "64GB", "Black", 699.99),
                 new ProductOption(2, "128GB", "Black", 749.99));
+        LoggerUtil.log("retrieveProductInfo after Delay");
         return ProductInfo.builder().productId(productId)
                 .productOptions(productOptions)
                 .build();
