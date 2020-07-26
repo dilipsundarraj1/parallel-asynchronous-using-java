@@ -11,6 +11,7 @@ import java.util.concurrent.RecursiveTask;
 
 import static com.learnjava.util.CommonUtil.delay;
 import static com.learnjava.util.CommonUtil.stopWatch;
+import static com.learnjava.util.LoggerUtil.log;
 
 public class ForkJoinUsingRecursion extends RecursiveTask<List<String>> {
 
@@ -35,10 +36,11 @@ public class ForkJoinUsingRecursion extends RecursiveTask<List<String>> {
         }
         int midPoint = inputList.size() / 2;
         ForkJoinTask<List<String>> leftInputList = new ForkJoinUsingRecursion(inputList.subList(0, midPoint)) //left side of the list
-                .fork(); // Arranges this task  in the deque
+                .fork(); // 1. asynchronously arranges this task in the deque,
         inputList = inputList.subList(midPoint, inputList.size()); //right side of the list
         List<String> rightResult = compute();
         List<String> leftResult = leftInputList.join();
+        log("leftResult : "+ leftResult);
         leftResult.addAll(rightResult);
         return leftResult;
     }
@@ -57,10 +59,10 @@ public class ForkJoinUsingRecursion extends RecursiveTask<List<String>> {
         // Start things running and get the result back, This is blocked until the results are calculated.
         List<String> resultList = forkJoinPool.invoke(forkJoinExampleUsingRecursion); // invoke -> Add the task to the shared queue from which all the other qu
 
-        LoggerUtil.log("resultList : " + resultList);
+        log("resultList : " + resultList);
 
         stopWatch.stop();
-        LoggerUtil.log("Total time taken : " + stopWatch.getTime());
+        log("Total time taken : " + stopWatch.getTime());
     }
 
 }
