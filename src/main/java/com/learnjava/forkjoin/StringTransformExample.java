@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.learnjava.util.CommonUtil.delay;
 import static com.learnjava.util.CommonUtil.stopWatch;
 import static com.learnjava.util.LoggerUtil.log;
 import static java.lang.Thread.sleep;
@@ -28,11 +29,7 @@ public class StringTransformExample {
 
 
     private static String addNameLengthTransform(String name) {
-        try {
-            sleep(500);
-        } catch (InterruptedException e) {
-            log("Exception Occurred " + e);
-        }
+        delay(500);
         return name.length()+" - "+name ;
     }
 }
