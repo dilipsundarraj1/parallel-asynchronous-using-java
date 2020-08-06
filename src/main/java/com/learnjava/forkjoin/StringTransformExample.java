@@ -1,7 +1,6 @@
 package com.learnjava.forkjoin;
 
 import com.learnjava.util.DataSet;
-import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,8 @@ public class StringTransformExample {
         stopWatch.start();
         List<String> resultList = new ArrayList<>();
         List<String> names = DataSet.namesList();
+        log("names : "+ names);
+
         names.forEach((name)->{
             String newValue = addNameLengthTransform(name);
             resultList.add(newValue);
