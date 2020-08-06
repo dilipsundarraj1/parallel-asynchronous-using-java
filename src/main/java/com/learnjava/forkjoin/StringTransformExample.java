@@ -16,6 +16,8 @@ public class StringTransformExample {
         stopWatch.start();
         List<String> resultList = new ArrayList<>();
         List<String> names = DataSet.namesList();
+        log("names : "+ names);
+
         names.forEach((name)->{
             String newValue = addNameLengthTransform(name);
             resultList.add(newValue);
