@@ -1,7 +1,6 @@
 package com.learnjava.forkjoin;
 
 import com.learnjava.util.DataSet;
-import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.List;
 import static com.learnjava.util.CommonUtil.delay;
 import static com.learnjava.util.CommonUtil.stopWatch;
 import static com.learnjava.util.LoggerUtil.log;
-import static java.lang.Thread.sleep;
 
 public class StringTransformExample {
 
