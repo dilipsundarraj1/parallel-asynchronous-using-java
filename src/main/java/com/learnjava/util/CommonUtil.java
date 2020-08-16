@@ -8,6 +8,14 @@ public class CommonUtil {
 
     public static StopWatch stopWatch = new StopWatch();
 
+   public static void startTimer(){
+       stopWatch.start();
+   }
+
+    public static long timeTaken(){
+        stopWatch.stop();
+        return stopWatch.getTime();
+    }
 
     public static void delay(long delayMilliSeconds)  {
         try{
