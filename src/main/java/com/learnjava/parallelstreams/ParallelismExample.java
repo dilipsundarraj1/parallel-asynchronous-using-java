@@ -11,6 +11,7 @@ public class ParallelismExample {
         List<String> namesList = List.of("Bob", "Jamie", "Jill", "Rick");
         System.out.println("namesList : " + namesList);
         List<String> namesListUpperCase = namesList
+                //.stream()
                 .parallelStream()
                 .map(String::toUpperCase)
                 .collect(Collectors.toList());
