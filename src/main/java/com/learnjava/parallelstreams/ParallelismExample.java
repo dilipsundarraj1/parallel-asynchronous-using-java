@@ -2,6 +2,7 @@ package com.learnjava.parallelstreams;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
@@ -23,6 +24,18 @@ public class ParallelismExample {
                 .map(String::toLowerCase)
                 .collect(Collectors.toList());
     }*/
+
+    public List<String> stringTransform_1(List<String> namesList, boolean isParallel) {
+
+        Stream<String> nameStream = namesList.stream();
+
+        if(isParallel)
+            nameStream.parallel();
+
+        return nameStream
+                .map(this::transform)
+                .collect(Collectors.toList());
+    }
 
     private String transform(String name) {
         delay(500);
