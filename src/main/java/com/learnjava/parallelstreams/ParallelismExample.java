@@ -24,8 +24,6 @@ public class ParallelismExample {
                 .collect(Collectors.toList());
     }*/
 
-
-
     private String transform(String name) {
         delay(500);
         //log("Transforming : " + name);
