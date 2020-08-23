@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ParallelismExampleTest {
 
-    ParallelismExample parallelismExample = new ParallelismExample();
+    ParallelStreamsExample parallelismExample = new ParallelStreamsExample();
 
     @Test
     void stringTransform() {

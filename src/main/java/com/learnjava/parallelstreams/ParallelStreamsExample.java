@@ -8,7 +8,7 @@ import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
 
 
-public class ParallelismExample {
+public class ParallelStreamsExample {
 
     public List<String> stringTransform(List<String> namesList){
         return namesList
@@ -47,7 +47,7 @@ public class ParallelismExample {
 
         List<String> namesList = List.of("Bob", "Jamie", "Jill", "Rick");
         startTimer();
-        ParallelismExample parallelismExample = new ParallelismExample();
+        ParallelStreamsExample parallelismExample = new ParallelStreamsExample();
         List<String> resultList =parallelismExample.stringTransform(namesList);
         timeTaken();
         log("resultList : " + resultList);
