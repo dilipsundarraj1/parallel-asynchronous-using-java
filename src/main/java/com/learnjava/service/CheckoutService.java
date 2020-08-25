@@ -34,7 +34,6 @@ public class CheckoutService {
                 .filter(CartItem::isExpired)
                 .collect(toList());
         timeTaken();
-       // stopWatchReset();
 
         if (priceValidationList.size() > 0) {
             log("Checkout Error");
