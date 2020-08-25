@@ -12,9 +12,9 @@ public class ParallelStreamsExample {
 
     public List<String> stringTransform(List<String> namesList){
         return namesList
-                //.stream()
-                .parallelStream()
+                .stream()
                 .map(this::transform)
+                .parallel()
                 .collect(Collectors.toList());
     }
 
