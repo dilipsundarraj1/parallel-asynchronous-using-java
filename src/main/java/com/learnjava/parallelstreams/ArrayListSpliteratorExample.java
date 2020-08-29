@@ -29,4 +29,22 @@ public class ArrayListSpliteratorExample {
         log("Completed!");
         return resultList;
     }
+
+    public List<Integer> multiplyEachValue(int n , int multiplyValue, boolean isParallel) {
+        startTimer();
+
+        IntStream integerStream = IntStream.range(0, n); // Stream of primitive int valued elements
+
+        if (isParallel)
+            integerStream.parallel();
+
+        List<Integer> resultList = integerStream
+                .map((i) -> i * multiplyValue)
+                .boxed()
+                .collect(Collectors.toList());
+        timeTaken();
+        stopWatchReset();
+        log("Completed!");
+        return resultList;
+    }
 }

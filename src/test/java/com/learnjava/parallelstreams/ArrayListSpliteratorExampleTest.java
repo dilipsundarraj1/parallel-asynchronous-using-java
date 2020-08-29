@@ -39,4 +39,30 @@ class ArrayListSpliteratorExampleTest {
         assertEquals(size, result.size());
     }
 
+    @RepeatedTest(5)
+    void multiplyEachValue_IntStream() {
+
+        int n = 1000000;
+        //when
+
+        List<Integer> result = arrayListSpliteratorExample.multiplyEachValue(1000000, 2, false);
+
+        //then
+        assertEquals(n, result.size());
+
+    }
+
+    @RepeatedTest(5)
+    void multiplyEachValue_IntStream_parallel() {
+
+        int n = 1000000;
+        //when
+
+        List<Integer> result = arrayListSpliteratorExample.multiplyEachValue(1000000, 2, true);
+
+        //then
+        assertEquals(n, result.size());
+
+    }
+
 }
