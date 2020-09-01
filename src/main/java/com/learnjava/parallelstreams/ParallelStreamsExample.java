@@ -46,6 +46,7 @@ public class ParallelStreamsExample {
     public static void main(String[] args) {
 
         List<String> namesList = List.of("Bob", "Jamie", "Jill", "Rick");
+        log("namesList : " + namesList);
         startTimer();
         ParallelStreamsExample parallelismExample = new ParallelStreamsExample();
         List<String> resultList =parallelismExample.stringTransform(namesList);
