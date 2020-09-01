@@ -34,13 +34,35 @@ public class CheckoutService {
                 .filter(CartItem::isExpired)
                 .collect(toList());
         timeTaken();
+        stopWatchReset();
 
         if (priceValidationList.size() > 0) {
             log("Checkout Error");
             return new CheckoutResponse(CheckoutStatus.FAILURE, priceValidationList);
         }
-        log("Checkout Complete");
 
-        return new CheckoutResponse(CheckoutStatus.SUCCESS);
+        //double finalRate = calculateFinalPrice(cart);
+        double finalRate = calculateFinalPrice_reduce(cart);
+        log("Checkout Complete and the final rate is " + finalRate);
+
+        return new CheckoutResponse(CheckoutStatus.SUCCESS, finalRate);
+    }
+
+    private double calculateFinalPrice(Cart cart) {
+        return cart.getCartItemList()
+                .parallelStream()
+                .map(CartItem::getRate)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+    }
+
+    private double calculateFinalPrice_reduce(Cart cart) {
+        return cart.getCartItemList()
+                .parallelStream()
+                .map(CartItem::getRate)
+                //.reduce(0.0, (x,y)->x+y);
+                .reduce(0.0, Double::sum);
+        //Identity for multiplication is 1
+        //Identity for addition  is 0
     }
 }
