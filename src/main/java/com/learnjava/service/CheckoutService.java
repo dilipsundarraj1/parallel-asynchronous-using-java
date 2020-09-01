@@ -7,9 +7,11 @@ import com.learnjava.domain.checkout.CheckoutResponse;
 import com.learnjava.domain.checkout.CheckoutStatus;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
+import static java.util.stream.Collectors.summingDouble;
 import static java.util.stream.Collectors.toList;
 
 public class CheckoutService {
@@ -52,8 +54,9 @@ public class CheckoutService {
         return cart.getCartItemList()
                 .parallelStream()
                 .map(CartItem::getRate)
-                .mapToDouble(Double::doubleValue)
-                .sum();
+                .collect(summingDouble(Double::doubleValue));
+        //.mapToDouble(Double::doubleValue)
+        //.sum();
     }
 
     private double calculateFinalPrice_reduce(Cart cart) {
