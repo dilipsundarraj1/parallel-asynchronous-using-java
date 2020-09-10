@@ -53,7 +53,7 @@ public class CheckoutService {
     private double calculateFinalPrice(Cart cart) {
         return cart.getCartItemList()
                 .parallelStream()
-                .map(CartItem::getRate)
+                .map(cartItem -> cartItem.getQuantity() * cartItem.getRate())
                 .collect(summingDouble(Double::doubleValue));
         //.mapToDouble(Double::doubleValue)
         //.sum();
@@ -62,7 +62,7 @@ public class CheckoutService {
     private double calculateFinalPrice_reduce(Cart cart) {
         return cart.getCartItemList()
                 .parallelStream()
-                .map(CartItem::getRate)
+                .map(cartItem -> cartItem.getQuantity() * cartItem.getRate())
                 //.reduce(0.0, (x,y)->x+y);
                 .reduce(0.0, Double::sum);
         //Identity for multiplication is 1
