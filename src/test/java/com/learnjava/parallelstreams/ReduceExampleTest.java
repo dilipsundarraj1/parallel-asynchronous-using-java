@@ -38,7 +38,7 @@ class ReduceExampleTest {
     }
 
     @Test
-    void reduce() {
+    void reduce_multiply() {
 
         //given
         List<Integer> inputList = List.of(1,2,3,4);
@@ -48,5 +48,18 @@ class ReduceExampleTest {
 
         //then
         assertEquals(24, result);
+    }
+
+    @Test
+    void reduce_multiply_emptyList() {
+
+        //given
+        List<Integer> inputList = new ArrayList<>();
+
+        //when
+        int result = reduceExample.reduce_multiply_parallelStream(inputList);
+
+        //then
+        assertEquals(1, result);
     }
 }
