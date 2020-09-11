@@ -36,12 +36,11 @@ class IntStreamExampleTest {
     }
 
     @Test
-    void sum_using_list() {
+    void sum_iterate() {
         //given
-        int size = 1000000;
-        ArrayList<Integer> inputList = DataSet.generateArrayList(size);
+
         //when
-        int sum = intStreamExample.sum_using_list(inputList, false);
+        int sum = intStreamExample.sum_iterate(1000000, false);
         System.out.println("sum : "+ sum);
 
         //then
@@ -49,15 +48,15 @@ class IntStreamExampleTest {
     }
 
     @Test
-    void sum_using_list_parallel() {
+    void sum_iterate_parallel() {
         //given
-        int size = 1000000;
-        ArrayList<Integer> inputList = DataSet.generateArrayList(size);
+
         //when
-        int sum = intStreamExample.sum_using_list(inputList, true);
+        int sum = intStreamExample.sum_iterate(1000000, true);
         System.out.println("sum : "+ sum);
 
         //then
         assertEquals(1784293664, sum);
     }
+
 }

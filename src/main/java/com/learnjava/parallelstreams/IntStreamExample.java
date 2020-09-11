@@ -22,17 +22,20 @@ public class IntStreamExample {
         return sum;
     }
 
-    public int sum_using_list(List<Integer> inputList, boolean isParallel){
+    public int sum_iterate(int count, boolean isParallel){
         startTimer();
-        Stream<Integer> inputStream = inputList.stream();
+         Stream<Integer> integerStream = Stream.iterate(0, n ->n+1 );
+
 
         if(isParallel)
-            inputStream.parallel();
+            integerStream.parallel();
 
-       int sum  = inputStream
-                .mapToInt(Integer::intValue)
-                .sum();
+        int sum = integerStream
+                .limit(count+1)
+                .reduce(0, Integer::sum);
+
         timeTaken();
         return sum;
     }
+
 }
