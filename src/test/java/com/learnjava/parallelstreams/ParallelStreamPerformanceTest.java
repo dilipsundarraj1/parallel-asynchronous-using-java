@@ -36,7 +36,7 @@ class ParallelStreamPerformanceTest {
     }
 
     @Test
-    void sum_using_iterate_iterate() {
+    void sum_using_iterate() {
         //given
 
         //when
