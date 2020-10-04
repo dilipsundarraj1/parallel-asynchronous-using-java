@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
+import static java.util.stream.Collectors.joining;
 
 public class CompletableFutureHelloWorld {
 
@@ -26,6 +27,13 @@ public class CompletableFutureHelloWorld {
         return CompletableFuture.supplyAsync(() -> helloWorldService.helloWorld())//  runs this in a common fork-join pool
                 .thenApply(String::toUpperCase)
                 .thenApply((s) -> s.length() + " - " + s);
+    }
+
+    public String helloWorld_approach1() {
+
+        String hello = helloWorldService.hello();
+        String world = helloWorldService.world();
+        return hello + world;
     }
 
     public String helloWorld_multiple_async_calls() {
@@ -66,9 +74,10 @@ public class CompletableFutureHelloWorld {
 
     public CompletableFuture<String> helloWorld_thenCompose() {
 
-        CompletableFuture<String> helloWorldFuture=    CompletableFuture.supplyAsync(() -> this.helloWorldService.hello())
-                 .thenCompose(previous -> helloWorldService.worldFuture(previous))
-                 .thenApply(String::toUpperCase);
+        CompletableFuture<String> helloWorldFuture = CompletableFuture.supplyAsync(() -> this.helloWorldService.hello())
+                .thenCompose(previous -> helloWorldService.worldFuture(previous))
+                //.thenApply(previous -> helloWorldService.worldFuture(previous))
+                .thenApply(String::toUpperCase);
 
         return helloWorldFuture;
 
@@ -79,6 +88,19 @@ public class CompletableFutureHelloWorld {
         return CompletableFuture.supplyAsync(() -> helloWorldService.helloWorld())//  runs this in a common fork-join pool
                 .thenApply(String::toUpperCase)
                 .join();
+
+    }
+
+    public CompletableFuture<String> complete(String input) {
+
+        CompletableFuture<String> completableFuture = new CompletableFuture();
+        completableFuture = completableFuture
+                .thenApply(String::toUpperCase)
+                .thenApply((result) -> result.length() + " - " + result);
+
+        completableFuture.complete(input);
+
+        return completableFuture;
 
     }
 
