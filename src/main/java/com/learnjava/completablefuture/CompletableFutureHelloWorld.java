@@ -10,36 +10,36 @@ import static java.util.stream.Collectors.joining;
 
 public class CompletableFutureHelloWorld {
 
-    private HelloWorldService helloWorldService;
+    private HelloWorldService hws;
 
     public CompletableFutureHelloWorld(HelloWorldService helloWorldService) {
-        this.helloWorldService = helloWorldService;
+        this.hws = helloWorldService;
     }
 
     public CompletableFuture<String> helloWorld() {
 
-        return CompletableFuture.supplyAsync(() -> helloWorldService.helloWorld())//  runs this in a common fork-join pool
+        return CompletableFuture.supplyAsync(() -> hws.helloWorld())//  runs this in a common fork-join pool
                 .thenApply(String::toUpperCase);
     }
 
     public CompletableFuture<String> helloWorld_withSize() {
 
-        return CompletableFuture.supplyAsync(() -> helloWorldService.helloWorld())//  runs this in a common fork-join pool
+        return CompletableFuture.supplyAsync(() -> hws.helloWorld())//  runs this in a common fork-join pool
                 .thenApply(String::toUpperCase)
                 .thenApply((s) -> s.length() + " - " + s);
     }
 
     public String helloWorld_approach1() {
 
-        String hello = helloWorldService.hello();
-        String world = helloWorldService.world();
+        String hello = hws.hello();
+        String world = hws.world();
         return hello + world;
     }
 
     public String helloWorld_multiple_async_calls() {
         startTimer();
-        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.helloWorldService.hello());
-        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.helloWorldService.world());
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.hws.hello());
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.hws.world());
 
         String hw = hello
                 .thenCombine(world, (h, w) -> h + w) // (first,second)
@@ -54,8 +54,8 @@ public class CompletableFutureHelloWorld {
 
     public String helloWorld_multiple_async_calls_1() {
         startTimer();
-        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.helloWorldService.hello());
-        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.helloWorldService.world());
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.hws.hello());
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.hws.world());
         CompletableFuture<String> hiCompletableFuture = CompletableFuture.supplyAsync(() -> {
             delay(1000);
             return " HI CompletableFuture!";
@@ -74,8 +74,8 @@ public class CompletableFutureHelloWorld {
 
     public CompletableFuture<String> helloWorld_thenCompose() {
 
-        CompletableFuture<String> helloWorldFuture = CompletableFuture.supplyAsync(() -> this.helloWorldService.hello())
-                .thenCompose(previous -> helloWorldService.worldFuture(previous))
+        CompletableFuture<String> helloWorldFuture = CompletableFuture.supplyAsync(() -> this.hws.hello())
+                .thenCompose(previous -> hws.worldFuture(previous))
                 //.thenApply(previous -> helloWorldService.worldFuture(previous))
                 .thenApply(String::toUpperCase);
 
@@ -85,7 +85,7 @@ public class CompletableFutureHelloWorld {
 
     public String helloWorld_1() {
 
-        return CompletableFuture.supplyAsync(() -> helloWorldService.helloWorld())//  runs this in a common fork-join pool
+        return CompletableFuture.supplyAsync(() -> hws.helloWorld())//  runs this in a common fork-join pool
                 .thenApply(String::toUpperCase)
                 .join();
 
