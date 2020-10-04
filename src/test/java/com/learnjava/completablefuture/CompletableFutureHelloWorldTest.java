@@ -54,17 +54,27 @@ class CompletableFutureHelloWorldTest {
 
     }
 
-
-
     @Test
-    void helloWorld_multiple_async_calls_1() {
+    void helloWorld_3_async_calls() {
 
         //given
         //when
-        String hw = cfhw.helloWorld_multiple_async_calls_1();
+        String hw = cfhw.helloWorld_3_async_calls();
 
         //then
         assertEquals("HELLO WORLD! HI COMPLETABLEFUTURE!", hw);
+
+    }
+
+    @Test
+    void helloWorld_4_async_calls() {
+
+        //given
+        //when
+        String hw = cfhw.helloWorld_4_async_calls();
+
+        //then
+        assertEquals("HELLO WORLD! HI COMPLETABLEFUTURE! BYE!", hw);
 
     }
 
@@ -82,6 +92,27 @@ class CompletableFutureHelloWorldTest {
                 .thenAccept(s -> {
                     //assertEquals("hello world", s);
                     assertEquals("HELLO WORLD!", s);
+                })
+                .join();
+        timeTaken();
+
+
+    }
+
+    @Test
+    void helloWorld_complete() {
+
+        //given
+        //when
+        startTimer();
+
+        CompletableFuture<String> completableFuture = cfhw.complete("hello world!");
+
+        //then
+        completableFuture
+                .thenAccept(s -> {
+                    //assertEquals("hello world", s);
+                    assertEquals("12 - HELLO WORLD!", s);
                 })
                 .join();
         timeTaken();

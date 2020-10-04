@@ -52,7 +52,8 @@ public class CompletableFutureHelloWorld {
     }
 
 
-    public String helloWorld_multiple_async_calls_1() {
+
+    public String helloWorld_3_async_calls() {
         startTimer();
         CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.hws.hello());
         CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.hws.world());
@@ -64,6 +65,32 @@ public class CompletableFutureHelloWorld {
         String hw = hello
                 .thenCombine(world, (h, w) -> h + w) // (first,second)
                 .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
+                .thenApply(String::toUpperCase)
+                .join();
+
+        timeTaken();
+
+        return hw;
+    }
+
+    public String helloWorld_4_async_calls() {
+        startTimer();
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.hws.hello());
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.hws.world());
+        CompletableFuture<String> hiCompletableFuture = CompletableFuture.supplyAsync(() -> {
+            delay(1000);
+            return " HI CompletableFuture!";
+        });
+        CompletableFuture<String>  byeCompletableFuture= CompletableFuture.supplyAsync(() -> {
+            delay(1000);
+            return " Bye!";
+        });
+
+
+        String hw = hello
+                .thenCombine(world, (h, w) -> h + w) // (first,second)
+                .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
+                .thenCombine(byeCompletableFuture, (previous, current) -> previous + current)
                 .thenApply(String::toUpperCase)
                 .join();
 
