@@ -112,7 +112,7 @@ class CompletableFutureHelloWorldTest {
         completableFuture
                 .thenAccept(s -> {
                     //assertEquals("hello world", s);
-                    assertEquals("12 - HELLO WORLD!", s);
+                    assertEquals("hello world!", s);
                 })
                 .join();
         timeTaken();
