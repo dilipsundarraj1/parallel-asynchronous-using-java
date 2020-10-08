@@ -82,12 +82,7 @@ public class ProductServiceUsingCompletableFuture {
                 .thenApply((productInfo -> {
                     productInfo.setProductOptions(updateInventoryToProductOption_approach2(productInfo));
                     return productInfo;
-                }))
-                /*.handle(((productInfo, throwable) -> {
-                    log("productInfo : " + productInfo);
-                    log("throwable : " + throwable);
-                    return productInfo;
-                }))*/;
+                }));
 
         CompletableFuture<Review> cfReview = CompletableFuture.supplyAsync(() -> reviewService.retrieveReviews(productId))
                 .exceptionally((ex) -> {
