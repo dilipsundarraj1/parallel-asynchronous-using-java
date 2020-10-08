@@ -78,7 +78,7 @@ class ProductServiceUsingCompletableFutureTest {
         assertNotNull(product);
         assertTrue(product.getProductInfo().getProductOptions().size() > 0);
         product.getProductInfo().getProductOptions().forEach(productOption -> {
-            assertTrue(productOption.getInventory()!=null);
+            assertNotNull(productOption.getInventory());
         });
 
 
@@ -100,7 +100,7 @@ class ProductServiceUsingCompletableFutureTest {
         assertNotNull(product);
         assertTrue(product.getProductInfo().getProductOptions().size() > 0);
         product.getProductInfo().getProductOptions().forEach(productOption -> {
-            assertTrue(productOption.getInventory()!=null);
+            assertNotNull(productOption.getInventory());
         });
 
 

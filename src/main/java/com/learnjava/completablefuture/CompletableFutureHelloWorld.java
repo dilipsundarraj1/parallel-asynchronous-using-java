@@ -6,7 +6,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
-import static java.util.stream.Collectors.joining;
 
 public class CompletableFutureHelloWorld {
 
