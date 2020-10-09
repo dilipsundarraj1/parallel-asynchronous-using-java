@@ -37,7 +37,7 @@ class ProductServiceUsingCompletableFutureExceptionTest {
         String productId = "ABC123";
         when(pisMock.retrieveProductInfo(any())).thenCallRealMethod();
         when(rssMock.retrieveReviews(any())).thenThrow(new RuntimeException("Exception Occurred"));
-        when(isMock.addInventory(any(ProductOption.class))).thenCallRealMethod();
+        when(isMock.retrieveInventory(any(ProductOption.class))).thenCallRealMethod();
 
 
         //when
@@ -61,7 +61,6 @@ class ProductServiceUsingCompletableFutureExceptionTest {
         String productId = "ABC123";
         when(pisMock.retrieveProductInfo(any())).thenThrow(new RuntimeException("Exception Occurred"));
         when(rssMock.retrieveReviews(any())).thenCallRealMethod();
-        //when(isMock.addInventory_CF(any(ProductOption.class))).thenCallRealMethod();
 
         //when
         Assertions.assertThrows(RuntimeException.class, ()->pscf.retrieveProductDetailsWithInventory_approach2(productId));
@@ -75,7 +74,7 @@ class ProductServiceUsingCompletableFutureExceptionTest {
         String productId = "ABC123";
         when(pisMock.retrieveProductInfo(any())).thenCallRealMethod();
         when(rssMock.retrieveReviews(any())).thenCallRealMethod();
-        when(isMock.addInventory(any(ProductOption.class))).thenThrow(new RuntimeException("Exception Occurred"));
+        when(isMock.retrieveInventory(any(ProductOption.class))).thenThrow(new RuntimeException("Exception Occurred"));
 
 
         //when

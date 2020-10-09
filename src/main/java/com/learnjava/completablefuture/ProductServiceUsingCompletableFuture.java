@@ -111,7 +111,7 @@ public class ProductServiceUsingCompletableFuture {
         List<ProductOption> productOptionList = productInfo.getProductOptions()
                 .stream()
                 .map(productOption -> {
-                    Inventory inventory = inventoryService.addInventory(productOption);
+                    Inventory inventory = inventoryService.retrieveInventory(productOption);
                     productOption.setInventory(inventory);
                     return productOption;
                 })
@@ -125,7 +125,7 @@ public class ProductServiceUsingCompletableFuture {
         List<CompletableFuture<ProductOption>> productOptionList = productInfo.getProductOptions()
                 .stream()
                 .map(productOption ->
-                        CompletableFuture.supplyAsync(() -> inventoryService.addInventory(productOption))
+                        CompletableFuture.supplyAsync(() -> inventoryService.retrieveInventory(productOption))
                                 .exceptionally((ex) -> {
                                     log("Exception in Inventory Service : " + ex.getMessage());
                                     return Inventory.builder()
