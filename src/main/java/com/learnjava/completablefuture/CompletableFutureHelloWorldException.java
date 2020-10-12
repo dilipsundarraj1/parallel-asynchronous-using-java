@@ -15,31 +15,6 @@ public class CompletableFutureHelloWorldException {
         this.hws = helloWorldService;
     }
 
-    public String helloWorld_3_async_calls_exceptionally() {
-        startTimer();
-        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.hws.hello());
-        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.hws.world());
-        CompletableFuture<String> hiCompletableFuture = CompletableFuture.supplyAsync(() -> {
-            delay(1000);
-            return " HI CompletableFuture!";
-        });
-
-        String hw = hello
-                .exceptionally( e->{
-                    log("Exception is : "+e.getMessage());
-                    return "";
-                })
-                .thenCombine(world, (h, w) -> h + w) // (first,second)
-                .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
-                .thenApply(String::toUpperCase)
-
-                .join();
-
-        timeTaken();
-
-        return hw;
-    }
-
     public String helloWorld_3_async_calls_handle() {
         startTimer();
         CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.hws.hello());
@@ -50,8 +25,46 @@ public class CompletableFutureHelloWorldException {
         });
 
         String hw = hello
-                .handle((result,e) ->{ // this gets invoked for both success and failure
-                    log("Exception is : "+e.getMessage());
+                .handle((result, e) -> { // this gets invoked for both success and failure
+                    log("result is : " + result);
+                    if (e != null) {
+                        log("Exception is : " + e.getMessage());
+                        return "";
+                    }
+                    return result;
+
+                })
+                .thenCombine(world, (h, w) -> h + w) // (first,second)
+                .handle((result, e) -> { // this gets invoked for both success and failure
+                    log("result is : " + result);
+                    if (e != null) {
+                        log("Exception Handle after world : " + e.getMessage());
+                        return "";
+                    }
+                    return result;
+                })
+                .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
+                .thenApply(String::toUpperCase)
+
+                .join();
+
+        timeTaken();
+
+        return hw;
+    }
+
+    public String helloWorld_3_async_calls_exceptionally() {
+        startTimer();
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.hws.hello());
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.hws.world());
+        CompletableFuture<String> hiCompletableFuture = CompletableFuture.supplyAsync(() -> {
+            delay(1000);
+            return " HI CompletableFuture!";
+        });
+
+        String hw = hello
+                .exceptionally(e -> {
+                    log("Exception is : " + e.getMessage());
                     return "";
                 })
                 .thenCombine(world, (h, w) -> h + w) // (first,second)
@@ -64,6 +77,7 @@ public class CompletableFutureHelloWorldException {
 
         return hw;
     }
+
 
     public String helloWorld_3_async_whenComplete() {
         startTimer();
@@ -75,13 +89,13 @@ public class CompletableFutureHelloWorldException {
         });
 
         String hw = hello
-                .whenComplete((result,e) ->{
+                .whenComplete((result, e) -> {
                     log("result is : " + result);
-                    log("Exception is : "+e.getMessage());
+                    log("Exception is : " + e.getMessage());
                     //return "";
                 })
-                .exceptionally((e)-> {
-                    log("Exception is : "+e.getMessage());
+                .exceptionally((e) -> {
+                    log("Exception is : " + e.getMessage());
                     return "";
                 })
                 .thenCombine(world, (h, w) -> h + w) // (first,second)
