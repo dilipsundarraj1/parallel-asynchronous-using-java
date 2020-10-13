@@ -63,11 +63,15 @@ public class CompletableFutureHelloWorldException {
         });
 
         String hw = hello
-                .exceptionally(e -> {
-                    log("Exception is : " + e.getMessage());
+                .exceptionally((e) -> { // this gets invoked for both success and failure
+                        log("Exception is : " + e.getMessage());
                     return "";
                 })
                 .thenCombine(world, (h, w) -> h + w) // (first,second)
+                .exceptionally((e) -> { // this gets invoked for both success and failure
+                        log("Exception Handle after world : " + e.getMessage());
+                        return "";
+                })
                 .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
                 .thenApply(String::toUpperCase)
 
