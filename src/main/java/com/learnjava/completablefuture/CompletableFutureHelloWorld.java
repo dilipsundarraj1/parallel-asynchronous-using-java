@@ -4,12 +4,12 @@ import com.learnjava.service.HelloWorldService;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
+import static java.util.stream.Collectors.joining;
 
 public class CompletableFutureHelloWorld {
 
@@ -216,7 +216,7 @@ public class CompletableFutureHelloWorld {
 
     }
 
-    public void allOf() {
+    public String allOf() {
 
         CompletableFuture<String> cf1 = CompletableFuture.supplyAsync(() -> {
             delay(1000);
@@ -225,17 +225,14 @@ public class CompletableFutureHelloWorld {
 
         CompletableFuture<String> cf2 = CompletableFuture.supplyAsync(() -> {
             delay(2000);
-            return "Hello";
+            return " World";
         });
 
-        CompletableFuture<String> cf3 = CompletableFuture.supplyAsync(() -> {
-            delay(3000);
-            return "Hello";
-        });
-
-        /*CompletableFuture<String>[] cfArray = List.of(cf1, cf2,cf3).toArray(new CompletableFuture<String>[0]);
-        CompletableFuture<Void> cf = CompletableFuture.allOf(cfArray);*/
-
+        List<CompletableFuture<String>> cfList = List.of(cf1, cf2);
+        CompletableFuture<Void> cfAllOf = CompletableFuture.allOf(cfList.toArray(new CompletableFuture[cfList.size()]));
+        return cfAllOf.thenApply(v -> cfList.stream()
+                .map(CompletableFuture::join)
+                .collect(joining())).join();
 
     }
 

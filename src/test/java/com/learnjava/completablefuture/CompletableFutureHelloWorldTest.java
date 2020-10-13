@@ -173,5 +173,15 @@ class CompletableFutureHelloWorldTest {
                 .join();
     }
 
+    @Test
+    void allOf() {
 
+        //given
+
+        //when
+        String result = cfhw.allOf();
+
+        //then
+        assertEquals("Hello World", result);
+    }
 }
