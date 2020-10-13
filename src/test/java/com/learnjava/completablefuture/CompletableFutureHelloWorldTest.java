@@ -1,6 +1,7 @@
 package com.learnjava.completablefuture;
 
 import com.learnjava.service.HelloWorldService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;
@@ -136,6 +137,7 @@ class CompletableFutureHelloWorldTest {
     }
 
     @Test
+    @Disabled
     void helloWorld_complete() {
 
         //given
