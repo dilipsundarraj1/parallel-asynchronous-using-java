@@ -10,7 +10,6 @@ import java.util.concurrent.Executors;
 
 import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
-import static java.util.stream.Collectors.joining;
 
 public class CompletableFutureHelloWorld {
 
@@ -62,10 +61,6 @@ public class CompletableFutureHelloWorld {
                 .thenCombine(world, (h, w) -> h + w) // (first,second)
                 .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
                 .thenApply(String::toUpperCase)
-                .exceptionally(e -> {
-                    log("Exception is : " + e.getMessage());
-                    return "";
-                })
                 .join();
 
         timeTaken();
@@ -97,10 +92,6 @@ public class CompletableFutureHelloWorld {
                 .thenApply(s -> {
                     log("thenApply");
                     return s.toUpperCase();
-                })
-                .exceptionally(e -> {
-                    log("Exception is : " + e.getMessage());
-                    return "";
                 })
                 .join();
 
@@ -138,10 +129,6 @@ public class CompletableFutureHelloWorld {
                 .thenApply(s -> {
                     log("thenApply");
                     return s.toUpperCase();
-                })
-                .exceptionally(e -> {
-                    log("Exception is : " + e.getMessage());
-                    return "";
                 })
                 .join();
 
@@ -183,10 +170,6 @@ public class CompletableFutureHelloWorld {
                 .thenApply(s -> {
                     log("thenApply");
                     return s.toUpperCase();
-                })
-                .exceptionally(e -> {
-                    log("Exception is : " + e.getMessage());
-                    return "";
                 })
                 .join();
 
