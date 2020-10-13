@@ -68,6 +68,22 @@ class CompletableFutureHelloWorldExceptionTest {
         assertEquals(expectedResult, result);
     }
 
+
+    @Test
+    void helloWorld_3_async_calls_exceptionally() {
+
+        //given
+        when(helloWorldService.hello()).thenThrow(new RuntimeException("Exception Occurred"));
+        when(helloWorldService.world()).thenThrow(new RuntimeException("Exception Occurred"));
+
+        //when
+        String result = hwcfe.helloWorld_3_async_calls_exceptionally();
+
+        //then
+        String expectedResult = " HI COMPLETABLEFUTURE!";
+        assertEquals(expectedResult, result);
+    }
+
     @Test
     void helloWorld_3_async_whenComplete() {
 
@@ -84,17 +100,18 @@ class CompletableFutureHelloWorldExceptionTest {
     }
 
     @Test
-    void helloWorld_3_async_calls_exceptionally() {
+    void helloWorld_3_async_whenComplete_2() {
 
         //given
-        when(helloWorldService.hello()).thenThrow(new RuntimeException("Exception Occurred"));
-        when(helloWorldService.world()).thenThrow(new RuntimeException("Exception Occurred"));
+        when(helloWorldService.hello()).thenCallRealMethod();
+        when(helloWorldService.world()).thenCallRealMethod();
 
         //when
-        String result = hwcfe.helloWorld_3_async_calls_exceptionally();
+        String result = hwcfe.helloWorld_3_async_whenComplete();
 
         //then
-        String expectedResult = " HI COMPLETABLEFUTURE!";
+        String expectedResult = "HELLO WORLD! HI COMPLETABLEFUTURE!";
         assertEquals(expectedResult, result);
     }
+
 }

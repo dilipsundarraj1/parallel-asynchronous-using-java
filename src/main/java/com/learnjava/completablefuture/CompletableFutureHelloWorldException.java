@@ -95,8 +95,8 @@ public class CompletableFutureHelloWorldException {
         String hw = hello
                 .whenComplete((result, e) -> {
                     log("result is : " + result);
-                    log("Exception is : " + e.getMessage());
-                    //return "";
+                    if(e!=null)
+                        log("Exception is : " + e.getMessage());
                 })
                 .exceptionally((e) -> {
                     log("Exception is : " + e.getMessage());
