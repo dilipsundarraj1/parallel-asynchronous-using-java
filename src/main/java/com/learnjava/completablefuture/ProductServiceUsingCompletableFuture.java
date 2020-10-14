@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static com.learnjava.util.CommonUtil.startTimer;
-import static com.learnjava.util.CommonUtil.timeTaken;
+import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
 
 public class ProductServiceUsingCompletableFuture {
@@ -81,6 +80,7 @@ public class ProductServiceUsingCompletableFuture {
         CompletableFuture<ProductInfo> cfProductInfo = CompletableFuture.supplyAsync(() -> productInfoService.retrieveProductInfo(productId))
                 .thenApply((productInfo -> {
                     productInfo.setProductOptions(updateInventoryToProductOption_approach2(productInfo));
+                    //  productInfo.setProductOptions(updateInventoryToProductOption_approach3(productInfo));
                     return productInfo;
                 }));
 
@@ -139,6 +139,33 @@ public class ProductServiceUsingCompletableFuture {
 
         return productOptionList.stream().map(CompletableFuture::join)
                 .collect(Collectors.toList());
+    }
+
+    private List<ProductOption> updateInventoryToProductOption_approach3(ProductInfo productInfo) {
+
+        List<CompletableFuture<ProductOption>> productOptionList = productInfo.getProductOptions()
+                .stream()
+                .map(productOption ->
+                        CompletableFuture.supplyAsync(() -> inventoryService.retrieveInventory(productOption))
+                                .exceptionally((ex) -> {
+                                    log("Exception in Inventory Service : " + ex.getMessage());
+                                    return Inventory.builder()
+                                            .count(1).build();
+                                })
+                                .thenApply((inventory -> {
+                                    productOption.setInventory(inventory);
+                                    return productOption;
+                                })))
+                .collect(Collectors.toList());
+
+        CompletableFuture<Void> cfAllOf = CompletableFuture.allOf(productOptionList.toArray(new CompletableFuture[productOptionList.size()]));
+        return cfAllOf
+                .thenApply(v->{
+                    return  productOptionList.stream().map(CompletableFuture::join)
+                            .collect(Collectors.toList());
+                })
+                .join();
+
     }
 
     public static void main(String[] args) {
