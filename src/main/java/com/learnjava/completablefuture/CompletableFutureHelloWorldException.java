@@ -109,7 +109,8 @@ public class CompletableFutureHelloWorldException {
                 .exceptionally((e) -> { // this gets invoked for both success and failure
                     log("Exception Handle after world : " + e.getMessage());
                     return "";
-                })                .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
+                })
+                .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
                 .thenApply(String::toUpperCase)
 
                 .join();
