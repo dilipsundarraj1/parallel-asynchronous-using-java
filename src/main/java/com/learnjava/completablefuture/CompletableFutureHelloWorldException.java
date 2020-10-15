@@ -93,23 +93,28 @@ public class CompletableFutureHelloWorldException {
         });
 
         String hw = hello
-                .whenComplete((result, e) -> {
+                .whenComplete((result, e) -> { // this gets invoked for both success and failure
                     log("result is : " + result);
-                    if(e!=null)
+                    if (e != null) {
                         log("Exception is : " + e.getMessage());
-                })
-                .exceptionally((e) -> {
-                    log("Exception is : " + e.getMessage());
-                    return "";
+                    }
                 })
                 .thenCombine(world, (h, w) -> h + w) // (first,second)
-                .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
+                .whenComplete((result, e) -> { // this gets invoked for both success and failure
+                    log("result is : " + result);
+                    if (e != null) {
+                        log("Exception Handle after world : " + e.getMessage());
+                    }
+                })
+                .exceptionally((e) -> { // this gets invoked for both success and failure
+                    log("Exception Handle after world : " + e.getMessage());
+                    return "";
+                })                .thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
                 .thenApply(String::toUpperCase)
 
                 .join();
 
         timeTaken();
-
         return hw;
     }
 
