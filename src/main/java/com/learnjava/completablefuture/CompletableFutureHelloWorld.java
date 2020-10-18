@@ -217,6 +217,7 @@ public class CompletableFutureHelloWorld {
     }
 
     public String allOf() {
+        startTimer();
 
         CompletableFuture<String> cf1 = CompletableFuture.supplyAsync(() -> {
             delay(1000);
@@ -230,11 +231,47 @@ public class CompletableFutureHelloWorld {
 
         List<CompletableFuture<String>> cfList = List.of(cf1, cf2);
         CompletableFuture<Void> cfAllOf = CompletableFuture.allOf(cfList.toArray(new CompletableFuture[cfList.size()]));
-        return cfAllOf.thenApply(v -> cfList.stream()
+        String result = cfAllOf.thenApply(v -> cfList.stream()
                 .map(CompletableFuture::join)
                 .collect(joining())).join();
 
+        timeTaken();
+
+        return result;
+
     }
+
+    public String anyOf() {
+        startTimer();
+
+        CompletableFuture<String> db = CompletableFuture.supplyAsync(() -> {
+            delay(1000);
+            return "Hello World";
+        });
+
+        CompletableFuture<String> restApi = CompletableFuture.supplyAsync(() -> {
+            delay(2000);
+            return "Hello World";
+        });
+
+        CompletableFuture<String> soapApi = CompletableFuture.supplyAsync(() -> {
+            delay(3000);
+            return "Hello World";
+        });
+
+        List<CompletableFuture<String>> cfList = List.of(db, restApi, soapApi);
+        CompletableFuture<Object> cfAllOf = CompletableFuture.anyOf(cfList.toArray(new CompletableFuture[cfList.size()]));
+        String result =  (String) cfAllOf.thenApply(v -> {
+            if (v instanceof String) {
+                return v;
+            }
+            return null;
+        }).join();
+
+        timeTaken();
+        return result;
+    }
+
 
     public String helloWorld_1() {
 
