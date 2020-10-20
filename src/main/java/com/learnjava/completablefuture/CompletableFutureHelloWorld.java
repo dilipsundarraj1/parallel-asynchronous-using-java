@@ -100,6 +100,40 @@ public class CompletableFutureHelloWorld {
         return hw;
     }
 
+    public String helloWorld_3_async_calls_log_async() {
+        startTimer();
+        CompletableFuture<String> hello = CompletableFuture.supplyAsync(() -> this.hws.hello());
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(() -> this.hws.world());
+        CompletableFuture<String> hiCompletableFuture = CompletableFuture.supplyAsync(() -> {
+            delay(1000);
+            return " HI CompletableFuture!";
+        });
+
+        String hw = hello
+                // .thenCombine(world, (h, w) -> h + w) // (first,second)
+                .thenCombineAsync(world, (h, w) -> {
+                    log("thenCombine h/w ");
+                    return h + w;
+                }) // (first,second)
+                //.thenCombine(hiCompletableFuture, (previous, current) -> previous + current)
+                .thenCombineAsync(hiCompletableFuture, (previous, current) -> {
+                    this.hws.hello();
+                    log("thenCombine , previous/current");
+                    return previous + current;
+                })
+                //.thenApply(String::toUpperCase)
+                .thenApplyAsync(s -> {
+                    this.hws.hello();
+                    log("thenApply");
+                    return s.toUpperCase();
+                })
+                .join();
+
+        timeTaken();
+
+        return hw;
+    }
+
 
     public String helloWorld_3_async_calls_custom_threadPool() {
 
