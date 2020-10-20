@@ -26,7 +26,7 @@ public class GitHubJobsClient {
         //startTimer();
 
         String uri = UriComponentsBuilder.fromUriString("/positions.json")
-                .queryParam("search", description)
+                .queryParam("description", description)
                 .queryParam("page", pageNum)
                 .buildAndExpand()
                 .toUriString();
