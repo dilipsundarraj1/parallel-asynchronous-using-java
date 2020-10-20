@@ -280,16 +280,19 @@ public class CompletableFutureHelloWorld {
 
         CompletableFuture<String> db = CompletableFuture.supplyAsync(() -> {
             delay(1000);
+            log("response from db");
             return "Hello World";
         });
 
         CompletableFuture<String> restApi = CompletableFuture.supplyAsync(() -> {
             delay(2000);
+            log("response from restApi");
             return "Hello World";
         });
 
         CompletableFuture<String> soapApi = CompletableFuture.supplyAsync(() -> {
             delay(3000);
+            log("response from soapApi");
             return "Hello World";
         });
 
