@@ -52,6 +52,10 @@ class ProductServiceUsingCompletableFutureExceptionTest {
         assertNotNull(product.getReview());
         assertEquals(0, product.getReview().getNoOfReviews());
 
+        long count = product.getProductInfo().getProductOptions().stream()
+                .count();
+        System.out.println("count : "+count);
+
     }
 
     @Test
