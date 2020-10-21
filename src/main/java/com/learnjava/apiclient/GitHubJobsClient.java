@@ -23,7 +23,6 @@ public class GitHubJobsClient {
     }
 
     public List<GitHubPosition> invokeGithubJobsApi_withPageNumber(int pageNum, String description) {
-        //startTimer();
 
         String uri = UriComponentsBuilder.fromUriString("/positions.json")
                 .queryParam("description", description)
@@ -32,15 +31,13 @@ public class GitHubJobsClient {
                 .toUriString();
         System.out.println("uri  : " + uri);
 
-        GitHubPosition[] gitHubPositions = webClient.get().uri(uri)
-                .header(CONTENT_TYPE, "application/json")
-                .accept(MediaType.APPLICATION_JSON)
+        List<GitHubPosition> gitHubPositions = webClient.get().uri(uri)
                 .retrieve()
-                .bodyToMono(GitHubPosition[].class)
+                .bodyToFlux(GitHubPosition.class)
+                .collectList()
                 .block();
 
-      //  timeTaken();
-        return Arrays.asList(gitHubPositions);
+        return gitHubPositions;
 
 
     }
