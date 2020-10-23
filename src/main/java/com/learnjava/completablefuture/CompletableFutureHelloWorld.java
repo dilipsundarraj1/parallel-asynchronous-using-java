@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static com.learnjava.util.CommonUtil.*;
 import static com.learnjava.util.LoggerUtil.log;
@@ -250,30 +251,21 @@ public class CompletableFutureHelloWorld {
 
     }
 
-    public String allOf() {
-        startTimer();
+    public String helloWorld_timeout() {
 
-        CompletableFuture<String> cf1 = CompletableFuture.supplyAsync(() -> {
-            delay(1000);
-            return "Hello";
-        });
-
-        CompletableFuture<String> cf2 = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<String> hw = CompletableFuture.supplyAsync(() -> {
             delay(2000);
-            return " World";
+            return "Hello World";
         });
 
-        List<CompletableFuture<String>> cfList = List.of(cf1, cf2);
-        CompletableFuture<Void> cfAllOf = CompletableFuture.allOf(cfList.toArray(new CompletableFuture[cfList.size()]));
-        String result = cfAllOf.thenApply(v -> cfList.stream()
-                .map(CompletableFuture::join)
-                .collect(joining())).join();
-
-        timeTaken();
-
-        return result;
-
+        return hw
+                .orTimeout(1, TimeUnit.SECONDS)
+                .whenComplete((v,ex)->{
+                    log("Exception is : "+ ex);
+                })
+                .join();
     }
+
 
     public String anyOf() {
         startTimer();
@@ -298,7 +290,7 @@ public class CompletableFutureHelloWorld {
 
         List<CompletableFuture<String>> cfList = List.of(db, restApi, soapApi);
         CompletableFuture<Object> cfAllOf = CompletableFuture.anyOf(cfList.toArray(new CompletableFuture[cfList.size()]));
-        String result =  (String) cfAllOf.thenApply(v -> {
+        String result = (String) cfAllOf.thenApply(v -> {
             if (v instanceof String) {
                 return v;
             }

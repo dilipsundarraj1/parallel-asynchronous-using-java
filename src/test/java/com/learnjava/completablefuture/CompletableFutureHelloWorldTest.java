@@ -1,10 +1,13 @@
 package com.learnjava.completablefuture;
 
 import com.learnjava.service.HelloWorldService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.TimeoutException;
 
 import static com.learnjava.util.CommonUtil.startTimer;
 import static com.learnjava.util.CommonUtil.timeTaken;
@@ -187,15 +190,10 @@ class CompletableFutureHelloWorldTest {
     }
 
     @Test
-    void allOf() {
-
-        //given
-
-        //when
-        String result = cfhw.allOf();
+    void helloWorld_timeout() {
 
         //then
-        assertEquals("Hello World", result);
+        Assertions.assertThrows(CompletionException.class, ()->cfhw.helloWorld_timeout());
     }
 
     @Test
