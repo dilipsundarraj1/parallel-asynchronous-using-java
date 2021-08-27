@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.learnjava.util.CommonUtil.startTimer;
-import static com.learnjava.util.CommonUtil.timeTaken;
+import static com.learnjava.util.CommonUtil.*;
 
 public class ParallelStreamPerformance {
 
