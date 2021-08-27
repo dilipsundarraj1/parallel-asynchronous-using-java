@@ -19,6 +19,7 @@ public class ParallelStreamPerformance {
         int sum = intStream
                 .sum();
         timeTaken();
+        stopWatchReset();
         return sum;
     }
 
@@ -34,6 +35,7 @@ public class ParallelStreamPerformance {
                 .mapToInt(Integer::intValue) // unboxing
                 .sum();
         timeTaken();
+        stopWatchReset();
         return sum;
     }
 
@@ -51,6 +53,7 @@ public class ParallelStreamPerformance {
                 .reduce(0, Integer::sum);
 
         timeTaken();
+        stopWatchReset();
         return sum;
     }
 
