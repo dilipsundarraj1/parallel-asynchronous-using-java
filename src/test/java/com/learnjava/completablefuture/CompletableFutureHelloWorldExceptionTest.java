@@ -7,6 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -51,6 +53,22 @@ class CompletableFutureHelloWorldExceptionTest {
         String expectedResult = " HI COMPLETABLEFUTURE!";
         assertEquals(expectedResult, result);
     }
+
+    @Test
+    void helloWorld_3_async_calls_handle_checkedException() {
+
+        //given
+        when(helloWorldService.hello()).thenAnswer( answer -> new SQLException("Exception Occurred"));
+        when(helloWorldService.world()).thenAnswer(answer -> new SQLException("Exception Occurred"));
+
+        //when
+        String result = hwcfe.helloWorld_3_async_calls_handle();
+
+        //then
+        String expectedResult = " HI COMPLETABLEFUTURE!";
+        assertEquals(expectedResult, result);
+    }
+
 
 
     @Test
