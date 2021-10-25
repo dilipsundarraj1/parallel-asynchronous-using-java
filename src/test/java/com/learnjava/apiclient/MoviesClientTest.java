@@ -1,10 +1,7 @@
 package com.learnjava.apiclient;
 
 import com.learnjava.util.CommonUtil;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Disabled
 class MoviesClientTest {
 
     WebClient webClient = WebClient.builder().baseUrl("http://localhost:8080/movies").build();
