@@ -5,8 +5,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,35 +16,30 @@ class MoviesClientTest {
     MoviesClient moviesClient = new MoviesClient(webClient);
 
 
+    @BeforeEach
+    void setUpMoviesClient() {
+        var movieInfoId = 1L;
+        moviesClient.retrieveMovie(movieInfoId);
+    }
+
     @Test
     @Order(1)
     void retrieveMovie() {
+        CommonUtil.startTimer();
         //given
         var movieInfoId = 1L;
 
         //when
+
         var movie = moviesClient.retrieveMovie(movieInfoId);
+
 
         //then
         assert movie!=null;
         assertEquals("Batman Begins", movie.getMovieInfo().getName());
         assert movie.getReviewList().size() == 1;
 
-
-    }
-
-    @Test
-    @Order(3)
-    void retrieveMovieList() {
-        //given
-        var movieInfoIds = List.of(1L,2L, 3L , 4L);
-
-        //when
-        var movies = moviesClient.retrieveMovieList(movieInfoIds);
-        System.out.println("movies : " + movies);
-
-        //then
-        assert movies.size() == 4;
+        CommonUtil.timeTaken();
     }
 
     @Test
@@ -67,22 +60,55 @@ class MoviesClientTest {
 
     }
 
+
+    @Test
+    @Order(3)
+    void retrieveMovieList() {
+        //given
+        var movieInfoIds = List.of(1L,2L, 3L , 4L, 5L, 6L, 7L);
+
+        //when
+        CommonUtil.startTimer();
+        var movies = moviesClient.retrieveMovieList(movieInfoIds);
+        System.out.println("movies : " + movies);
+        CommonUtil.timeTaken();
+
+        //then
+        assert movies.size() == 7;
+    }
+
+
     @Test
     @Order(4)
     void retrieveMovieList_CF() {
         //given
-        var movieInfoIds = List.of(1L,2L, 3L , 4L);
+        var movieInfoIds = List.of(1L,2L, 3L , 4L, 5L, 6L, 7L);
 
         //when
         CommonUtil.startTimer();
-        var movies = moviesClient.retrieveMovieList_CF(movieInfoIds).stream()
-                .map(CompletableFuture::join)
-                .collect(Collectors.toList());
+        var movies = moviesClient.retrieveMovieList_CF(movieInfoIds);
 
         System.out.println("movies : " + movies);
         CommonUtil.timeTaken();
         //then
-        assert movies.size() == 4;
+        assert movies.size() == 7;
+
+    }
+
+    @Test
+    @Order(5)
+    void retrieveMovieList_CF_approach2() {
+        //given
+        var movieInfoIds = List.of(1L,2L, 3L , 4L, 5L, 6L, 7L);
+
+        //when
+        CommonUtil.startTimer();
+        var movies = moviesClient.retrieveMovieList_CF_allOf(movieInfoIds);
+
+        System.out.println("movies : " + movies);
+        CommonUtil.timeTaken();
+        //then
+        assert movies.size() == 7;
 
     }
 }

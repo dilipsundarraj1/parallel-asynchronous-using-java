@@ -14,31 +14,26 @@ import java.util.stream.Collectors;
 
 public class MoviesClient {
 
-    private WebClient webClient;
+    private final WebClient webClient;
 
     public MoviesClient(WebClient webClient) {
         this.webClient = webClient;
     }
 
     public Movie retrieveMovie(Long movieInfoId) {
-        //CommonUtil.startTimer();
         var movieInfo = invokeMoviesService(movieInfoId);
         var reviews = invokeReviewsService(movieInfoId);
-        //CommonUtil.timeTaken();
         return new Movie(movieInfo, reviews);
 
     }
 
     public List<Movie> retrieveMovieList(List<Long> movieInfoIds) {
-        CommonUtil.startTimer();
-        var moviesList = movieInfoIds
+
+        return movieInfoIds
                 .stream()
-                .parallel()
+                //.parallel()
                 .map(this::retrieveMovie)
                 .collect(Collectors.toList());
-
-        CommonUtil.timeTaken();
-        return moviesList;
 
     }
 
@@ -46,18 +41,57 @@ public class MoviesClient {
 
         var movieInfo = CompletableFuture.supplyAsync(() -> invokeMoviesService(movieInfoId));
         var reviews = CompletableFuture.supplyAsync(() -> invokeReviewsService(movieInfoId));
-        return movieInfo.thenCombine(reviews, (movieInfo1, reviews1) -> {
-            return new Movie(movieInfo1, reviews1);
-        });
+        return movieInfo.thenCombine(reviews, Movie::new);
     }
 
-    public List<CompletableFuture<Movie>> retrieveMovieList_CF(List<Long> movieInfoIds) {
+    public List<Movie> retrieveMovieList_CF(List<Long> movieInfoIds) {
 
-        return movieInfoIds
+        var movieFutures = movieInfoIds
                 .stream()
                 .parallel()
                 .map(this::retrieveMovie_CF)
                 .collect(Collectors.toList());
+
+
+        return movieFutures
+                .stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
+
+    }
+
+    public List<Movie> retrieveMovieList_CF_allOf(List<Long> movieInfoIds) {
+
+        var movieFutures = movieInfoIds
+                .stream()
+                .parallel()
+                .map(this::retrieveMovie_CF)
+                .collect(Collectors.toList());
+
+        var cfAllOf = CompletableFuture.allOf(movieFutures.toArray(new CompletableFuture[movieFutures.size()]));
+
+         return cfAllOf
+                .thenApply(v-> movieFutures.stream()
+                            .map(CompletableFuture::join)
+                            .collect(Collectors.toList()))
+                 .join();
+    }
+
+    public List<Movie> retrieveMovieList_CF_anyOf(List<Long> movieInfoIds) {
+
+        var movieFutures = movieInfoIds
+                .stream()
+                .parallel()
+                .map(this::retrieveMovie_CF)
+                .collect(Collectors.toList());
+
+        var cfAllOf = CompletableFuture.allOf(movieFutures.toArray(new CompletableFuture[movieFutures.size()]));
+
+        return cfAllOf
+                .thenApply(v-> movieFutures.stream()
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toList()))
+                .join();
     }
 
     private List<Review> invokeReviewsService(Long movieInfoId) {
