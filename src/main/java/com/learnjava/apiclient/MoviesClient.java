@@ -1,10 +1,8 @@
 package com.learnjava.apiclient;
 
-import com.learnjava.domain.github.GitHubPosition;
 import com.learnjava.domain.movie.Movie;
 import com.learnjava.domain.movie.MovieInfo;
 import com.learnjava.domain.movie.Review;
-import com.learnjava.util.CommonUtil;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -21,10 +19,9 @@ public class MoviesClient {
     }
 
     public Movie retrieveMovie(Long movieInfoId) {
-        var movieInfo = invokeMoviesService(movieInfoId);
+        var movieInfo = invokeMovieInfoService(movieInfoId);
         var reviews = invokeReviewsService(movieInfoId);
         return new Movie(movieInfo, reviews);
-
     }
 
     public List<Movie> retrieveMovieList(List<Long> movieInfoIds) {
@@ -39,7 +36,7 @@ public class MoviesClient {
 
     public CompletableFuture<Movie> retrieveMovie_CF(Long movieInfoId) {
 
-        var movieInfo = CompletableFuture.supplyAsync(() -> invokeMoviesService(movieInfoId));
+        var movieInfo = CompletableFuture.supplyAsync(() -> invokeMovieInfoService(movieInfoId));
         var reviews = CompletableFuture.supplyAsync(() -> invokeReviewsService(movieInfoId));
         return movieInfo.thenCombine(reviews, Movie::new);
     }
@@ -111,7 +108,7 @@ public class MoviesClient {
     }
 
 
-    public MovieInfo invokeMoviesService(Long movieInfoId) {
+    public MovieInfo invokeMovieInfoService(Long movieInfoId) {
 
         var movieInfoUrlPath = "/v1//movie_infos/{movieInfoId}";
 
