@@ -110,7 +110,7 @@ public class MoviesClient {
 
     public MovieInfo invokeMovieInfoService(Long movieInfoId) {
 
-        var movieInfoUrlPath = "/v1//movie_infos/{movieInfoId}";
+        var movieInfoUrlPath = "/v1/movie_infos/{movieInfoId}";
 
         var movieInfo = webClient.get()
                 .uri(movieInfoUrlPath, movieInfoId)
