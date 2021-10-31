@@ -8,7 +8,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Disabled
 class MoviesClientTest {
 
@@ -23,7 +22,7 @@ class MoviesClientTest {
     }
 
     @Test
-    @Order(1)
+    @RepeatedTest(10)
     void retrieveMovie() {
         CommonUtil.startTimer();
         //given
@@ -43,7 +42,27 @@ class MoviesClientTest {
     }
 
     @Test
-    @Order(2)
+    @RepeatedTest(10)
+    void retrieveMovie_1() {
+        CommonUtil.startTimer();
+        //given
+        var movieInfoId = 1L;
+
+        //when
+
+        var movie = moviesClient.retrieveMovie(movieInfoId);
+
+
+        //then
+        assert movie!=null;
+        assertEquals("Batman Begins", movie.getMovieInfo().getName());
+        assert movie.getReviewList().size() == 1;
+
+        CommonUtil.timeTaken();
+    }
+
+    @Test
+    @RepeatedTest(10)
     void retrieveMovie_CF() {
         //given
         var movieInfoId = 1L;
@@ -62,7 +81,6 @@ class MoviesClientTest {
 
 
     @Test
-    @Order(3)
     void retrieveMovieList() {
         //given
         var movieInfoIds = List.of(1L,2L, 3L , 4L, 5L, 6L, 7L);
@@ -79,7 +97,6 @@ class MoviesClientTest {
 
 
     @Test
-    @Order(4)
     void retrieveMovieList_CF() {
         //given
         var movieInfoIds = List.of(1L,2L, 3L , 4L, 5L, 6L, 7L);
@@ -96,7 +113,6 @@ class MoviesClientTest {
     }
 
     @Test
-    @Order(5)
     void retrieveMovieList_CF_approach2() {
         //given
         var movieInfoIds = List.of(1L,2L, 3L , 4L, 5L, 6L, 7L);
